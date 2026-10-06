@@ -1,0 +1,38 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "openbka",
+	"compatibility_date": "2026-10-06",
+	"compatibility_flags": ["nodejs_als"],
+	"main": ".svelte-kit/cloudflare/_worker.js",
+	"assets": {
+		"binding": "ASSETS",
+		"directory": ".svelte-kit/cloudflare"
+	},
+
+	// Serve on <name>.<subdomain>.workers.dev until a custom domain is attached.
+	"workers_dev": true,
+	// Don't expose every uploaded version at its own public URL.
+	"preview_urls": false,
+
+	"observability": {
+		"enabled": true
+	},
+
+	// IDs are omitted so Wrangler provisions these on first deploy. Data is kept in
+	// the EU jurisdiction: R2 via `jurisdiction` below, D1 by `npm run setup`
+	// creating the database before the first deploy (D1 bindings can't set it).
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "openbka",
+			"migrations_dir": "drizzle"
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "FILES",
+			"bucket_name": "openbka-files",
+			"jurisdiction": "eu"
+		}
+	]
+}
