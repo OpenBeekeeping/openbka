@@ -84,10 +84,27 @@ const link = readFileSync(ACCOUNTS_LOG, 'utf8')
 if (!link) fail('no magic link in accounts log');
 
 url = link;
+for (let hops = 0; hops < 6 && !url.includes('/profile'); hops++)
+	url = next(await req(url), ACCOUNTS);
+if (!url.includes('/profile?')) fail(`after magic link -> ${url}`);
+step('magic link signs in; new account is asked to finish its profile');
+
+// 3b. Complete the profile; Guardbee continues the sign-in to consent.
+const profileUrl = new URL(url);
+res = await req(profileUrl.href, {
+	method: 'POST',
+	headers: {
+		'content-type': 'application/x-www-form-urlencoded',
+		origin: ACCOUNTS,
+		accept: 'text/html'
+	},
+	body: new URLSearchParams([['name', 'Ada Apis']])
+});
+url = next(res, ACCOUNTS);
 for (let hops = 0; hops < 6 && !url.includes('/consent'); hops++)
 	url = next(await req(url), ACCOUNTS);
-if (!url.includes('/consent')) fail(`after magic link -> ${url}`);
-step('magic link signs in and reaches the consent screen');
+if (!url.includes('/consent')) fail(`after profile -> ${url}`);
+step('profile saved; sign-in continues to the consent screen');
 
 // 4. Approve; accounts redirects back to OpenBKA's callback with a code.
 const consentUrl = new URL(url);
@@ -119,8 +136,8 @@ if (res.status !== 303 || next(res, BKA) !== `${BKA}/?welcome`)
 	fail(`callback -> ${res.status} ${res.headers.get('location')}`);
 if (!jars.get(BKA).has('openbka_session')) fail('no session cookie');
 html = await (await req(`${BKA}/`)).text();
-if (!html.includes(EMAIL)) fail('home page does not show the signed-in user');
-step(`signed in to OpenBKA as ${EMAIL}`);
+if (!html.includes('Ada Apis')) fail('home page does not show the signed-in user');
+step(`signed in to OpenBKA as Ada Apis (${EMAIL})`);
 
 // 7. The authorization code can't be replayed.
 const replayJar = new Map(jars.get(BKA));
