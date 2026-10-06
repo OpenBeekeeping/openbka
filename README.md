@@ -14,9 +14,34 @@ Part of [Open Beekeeping](https://openbeekeeping.org). A managed, hosted version
 
 It's serverless by design: no servers to patch, no database exposed to the internet, and it runs within Cloudflare's free tier for most associations.
 
+## Sign-in
+
+People sign in with their [Open Beekeeping account](https://github.com/OpenBeekeeping) using OpenID Connect. OpenBKA has no passwords or login forms of its own; it stores each person's account ID, email and name, plus its own sessions.
+
+Each instance is registered with the accounts service as an app, and is given a client ID and secret:
+
+| Variable             | Value                                                      |
+| -------------------- | ---------------------------------------------------------- |
+| `ORIGIN`             | This instance's public URL, e.g. `https://bka.example.org` |
+| `OIDC_ISSUER`        | Defaults to `https://accounts.openbeekeeping.org`          |
+| `OIDC_CLIENT_ID`     | Issued when the instance is registered                     |
+| `OIDC_CLIENT_SECRET` | Issued with the client ID                                  |
+
 ## Development
 
-Requires Node 24 (`nvm use` picks it up from `.nvmrc`).
+Requires Node 24 (`nvm use` picks it up from `.nvmrc`), and the [accounts service](../accounts) running locally on port 4173 (`npm run preview` there).
+
+Register this app with your local accounts service, which writes the client ID and secret into `.env`:
+
+```sh
+cd ../accounts
+npm run client:register -- --name "OpenBKA (local)" \
+  --redirect http://localhost:5173/auth/callback --redirect http://localhost:4174/auth/callback \
+  --post-logout http://localhost:5173/ --post-logout http://localhost:4174/ \
+  --env-file ../openbka/.env
+```
+
+Then add `ORIGIN="http://localhost:5173"` and `OIDC_ISSUER="http://localhost:4173"` to `.env`, and copy it to `.dev.vars` with `ORIGIN="http://localhost:4174"` for `npm run preview`.
 
 ```sh
 npm install
@@ -30,6 +55,7 @@ npm run dev
 | `npm run check`            | Type-check                                                    |
 | `npm run lint`             | Prettier + ESLint                                             |
 | `npm test`                 | Unit tests                                                    |
+| `npm run test:e2e`         | Sign-in end to end (needs both apps running in preview)       |
 | `npm run build`            | Production build                                              |
 | `npm run preview`          | Run the production build locally in the Workers runtime       |
 | `npm run gen`              | Regenerate `worker-configuration.d.ts` after editing bindings |
@@ -47,6 +73,9 @@ You need a (free) Cloudflare account.
 ```sh
 npx wrangler login
 npm run setup       # once: create the D1 database in the EU jurisdiction
+npx wrangler secret put ORIGIN
+npx wrangler secret put OIDC_CLIENT_ID
+npx wrangler secret put OIDC_CLIENT_SECRET
 npm run deploy      # deploys, creating the R2 bucket (EU) on first run
 npm run db:migrate  # apply migrations to the deployed database
 ```

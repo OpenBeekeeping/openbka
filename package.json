@@ -11,7 +11,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "npm run clean:build && wrangler types --check && vite build",
-		"preview": "wrangler dev .svelte-kit/cloudflare/_worker.js --port 4173",
+		"preview": "wrangler dev .svelte-kit/cloudflare/_worker.js --port 4174",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "npm run clean:build && wrangler types --check && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -25,7 +25,8 @@
 		"db:migrate": "wrangler d1 migrations apply DB --remote",
 		"deploy": "npm run build && wrangler deploy",
 		"clean:build": "node -e \"for (const d of ['output','cloudflare','cloudflare-tmp']) require('fs').rmSync('.svelte-kit/'+d,{recursive:true,force:true})\"",
-		"setup": "wrangler d1 create openbka --jurisdiction eu"
+		"setup": "wrangler d1 create openbka --jurisdiction eu",
+		"test:e2e": "node scripts/e2e-sign-in.mjs"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
@@ -59,5 +60,8 @@
 		"esbuild@0.28.1": true,
 		"esbuild@0.18.20": true,
 		"workerd@1.20261001.1": true
+	},
+	"dependencies": {
+		"openid-client": "^6.8.8"
 	}
 }
