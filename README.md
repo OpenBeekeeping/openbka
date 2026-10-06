@@ -16,9 +16,9 @@ It's serverless by design: no servers to patch, no database exposed to the inter
 
 ## Sign-in
 
-People sign in with their [Open Beekeeping account](https://github.com/OpenBeekeeping) using OpenID Connect. OpenBKA has no passwords or login forms of its own; it stores each person's account ID, email and name, plus its own sessions.
+People sign in with their Open Beekeeping account, provided by [Guardbee](https://github.com/OpenBeekeeping/guardbee), using OpenID Connect. OpenBKA has no passwords or login forms of its own; it stores each person's account ID, email and name, plus its own sessions.
 
-Each instance is registered with the accounts service as an app, and is given a client ID and secret:
+Each instance is registered with Guardbee as an app, and is given a client ID and secret:
 
 | Variable             | Value                                                      |
 | -------------------- | ---------------------------------------------------------- |
@@ -29,12 +29,12 @@ Each instance is registered with the accounts service as an app, and is given a 
 
 ## Development
 
-Requires Node 24 (`nvm use` picks it up from `.nvmrc`), and the [accounts service](../accounts) running locally on port 4173 (`npm run preview` there).
+Requires Node 24 (`nvm use` picks it up from `.nvmrc`), and [Guardbee](../guardbee) running locally on port 4173 (`npm run preview` there).
 
-Register this app with your local accounts service, which writes the client ID and secret into `.env`:
+Register this app with your local Guardbee, which writes the client ID and secret into `.env`:
 
 ```sh
-cd ../accounts
+cd ../guardbee
 npm run client:register -- --name "OpenBKA (local)" \
   --redirect http://localhost:5173/auth/callback --redirect http://localhost:4174/auth/callback \
   --post-logout http://localhost:5173/ --post-logout http://localhost:4174/ \
