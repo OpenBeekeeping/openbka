@@ -16,7 +16,7 @@ It's serverless by design: no servers to patch, no database exposed to the inter
 
 ## Sign-in
 
-People sign in with their Open Beekeeping account, provided by [Guardbee](https://github.com/OpenBeekeeping/guardbee), using OpenID Connect. OpenBKA has no passwords or login forms of its own; it stores each person's account ID, email and name, plus its own sessions.
+People sign in with their Open Beekeeping account, provided by Guardbee (the Open Beekeeping sign-in service, not yet public), using OpenID Connect. OpenBKA has no passwords or login forms of its own; it stores each person's account ID, email and name, plus its own sessions.
 
 Each instance is registered with Guardbee as an app, and is given a client ID and secret:
 
@@ -29,7 +29,7 @@ Each instance is registered with Guardbee as an app, and is given a client ID an
 
 ## Development
 
-Requires Node 24 (`nvm use` picks it up from `.nvmrc`), and [Guardbee](../guardbee) running locally on port 4173 (`npm run preview` there).
+Requires Node 24 (`nvm use` picks it up from `.nvmrc`), and a local copy of Guardbee running on port 4173 (`npm run preview` there). Guardbee isn't public yet; ask a maintainer for access.
 
 Register this app with your local Guardbee, which writes the client ID and secret into `.env`:
 
