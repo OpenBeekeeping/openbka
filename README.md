@@ -63,6 +63,16 @@ composer run dev
 
 Run the tests with `php artisan test` and format with `vendor/bin/pint`.
 
+### Design system
+
+OpenBKA uses the [Open Beekeeping design system](https://github.com/OpenBeekeeping/design). Its tokens, fonts and logos are copied into `public/design` and `resources/design`. To update them, check out the design repo next to this one and run:
+
+```sh
+php artisan openbka:sync-design ../design
+```
+
+Filament's colours are built from the tokens in `App\Support\Design`, and `public/css/openbka.css` applies the brand rules (square corners, mono lowercase labels, yellow primary actions) to Filament's components.
+
 ## Security
 
 Report vulnerabilities privately through GitHub's "Report a vulnerability" button on this repository.

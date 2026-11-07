@@ -1,0 +1,158 @@
+/*
+ * OpenBKA: the Open Beekeeping design system ("Bracket") applied to Filament.
+ * Loads after design/css/openbeekeeping.css and design/css/theme.css, so the
+ * tokens (--surface, --ink, --brand, ...) follow Filament's light/dark switch.
+ * Colour palettes come from the same tokens in App\Support\Design.
+ */
+
+/* Shape: nearly square corners, no shadows. Depth comes from surfaces and borders. */
+:root {
+	--radius-xs: 2px;
+	--radius-sm: 2px;
+	--radius-md: 2px;
+	--radius-lg: 2px;
+	--radius-xl: 4px;
+	--radius-2xl: 4px;
+	--font-family-mono: var(--font-mono);
+}
+
+*,
+::before,
+::after {
+	--tw-shadow: 0 0 #0000 !important;
+}
+
+/* Type: Plex Sans for reading, Martian Mono for headings and interface labels. */
+body.fi-body {
+	font-family: var(--font-sans);
+	background-color: var(--surface);
+	color: var(--ink);
+}
+
+.fi-header-heading,
+.fi-simple-header-heading {
+	font-family: var(--font-mono);
+	font-weight: 700;
+	letter-spacing: -0.05em;
+}
+
+.fi-section-header-heading,
+.fi-modal-heading,
+.fi-wi-stats-overview-stat-value {
+	font-family: var(--font-mono);
+	font-weight: 700;
+	letter-spacing: -0.04em;
+}
+
+/* Interface labels are lowercase mono, like the wordmark. */
+.fi-btn,
+.fi-badge,
+.fi-link,
+.fi-tabs-item-label,
+.fi-sidebar-item-label,
+.fi-sidebar-group-label,
+.fi-dropdown-list-item-label,
+.fi-fo-field-label-content,
+.fi-ta-header-cell,
+.fi-wi-stats-overview-stat-label {
+	font-family: var(--font-mono);
+	letter-spacing: 0.02em;
+	text-transform: lowercase;
+}
+
+.fi-btn,
+.fi-badge,
+.fi-fo-field-label-content,
+.fi-ta-header-cell,
+.fi-wi-stats-overview-stat-label {
+	font-size: 12px;
+	font-weight: 600;
+}
+
+/* Names people typed stay as typed. */
+.fi-tenant-menu-trigger,
+.fi-tenant-menu-trigger * {
+	text-transform: none;
+}
+
+/* Surfaces. */
+.fi-topbar > nav,
+.fi-sidebar,
+.fi-sidebar-header {
+	background-color: var(--surface);
+}
+
+.fi-section,
+.fi-ta-ctn,
+.fi-wi-stats-overview-stat,
+.fi-simple-main,
+.fi-modal-window,
+.fi-dropdown-panel {
+	background-color: var(--surface-raised);
+	--tw-ring-color: var(--line);
+}
+
+/* Controls are drawn in line-strong; decorative edges in line. */
+.fi-input-wrp {
+	background-color: var(--surface-raised);
+	--tw-ring-color: var(--line-strong);
+}
+
+.fi-input-wrp:focus-within {
+	--tw-ring-color: var(--focus-ring);
+}
+
+/* Primary actions: pollen yellow with on-brand text, and an outline on light. */
+.fi-btn.fi-color-primary:not(.fi-outlined) {
+	--bg: var(--brand);
+	--dark-bg: var(--brand);
+	--hover-bg: var(--brand-hover);
+	--dark-hover-bg: var(--brand-hover);
+	--text: var(--on-brand);
+	--dark-text: var(--on-brand);
+	--hover-text: var(--on-brand);
+	--dark-hover-text: var(--on-brand);
+	box-shadow: inset 0 0 0 1px var(--on-brand);
+}
+
+.fi-btn.fi-color-primary:not(.fi-outlined) > .fi-icon {
+	color: var(--on-brand);
+}
+
+/* Links in brand-ink. */
+.fi-link.fi-color-primary {
+	color: var(--brand-ink);
+}
+
+/* Keyboard focus: solid 2px ring, offset 2px. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+	outline: 2px solid var(--focus-ring);
+	outline-offset: 2px;
+}
+
+/* Product colour appears only on the logo, so the active nav item stays neutral. */
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+	background-color: var(--surface-hover);
+}
+
+.fi-sidebar-item.fi-active .fi-sidebar-item-label,
+.fi-sidebar-item.fi-active .fi-icon {
+	color: var(--ink);
+}
+
+/* Status colours are for text and borders, never fills: danger actions are outlined. */
+.fi-btn.fi-color-danger:not(.fi-outlined) {
+	--bg: transparent;
+	--dark-bg: transparent;
+	--hover-bg: var(--surface-hover);
+	--dark-hover-bg: var(--surface-hover);
+	--text: var(--alert);
+	--dark-text: var(--alert);
+	--hover-text: var(--alert);
+	--dark-hover-text: var(--alert);
+	box-shadow: inset 0 0 0 1px var(--alert);
+}
+
+.fi-btn.fi-color-danger:not(.fi-outlined) > .fi-icon {
+	color: var(--alert);
+}

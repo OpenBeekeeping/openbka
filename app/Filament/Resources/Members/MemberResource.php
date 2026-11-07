@@ -14,7 +14,9 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class MemberResource extends Resource
 {
@@ -39,6 +41,11 @@ class MemberResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return Access::scopeToBranch(parent::getEloquentQuery());
+    }
+
+    public static function getRecordTitle(?Model $record): string|Htmlable|null
+    {
+        return $record?->name ?? static::getModelLabel();
     }
 
     public static function getGloballySearchableAttributes(): array

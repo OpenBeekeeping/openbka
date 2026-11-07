@@ -8,8 +8,10 @@ use App\Filament\Pages\Auth\Register;
 use App\Filament\Pages\Tenancy\EditAssociation;
 use App\Filament\Pages\Tenancy\RegisterAssociation;
 use App\Models\Association;
+use App\Support\Design;
 use App\Support\Mode;
 use Filament\Enums\ThemeMode;
+use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -17,13 +19,14 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use MarcelWeidum\Passkeys\PasskeysPlugin;
 
@@ -47,12 +50,16 @@ class AppPanelProvider extends PanelProvider
             ->tenantBillingProvider($hosted ? new StripeBillingProvider : null)
             ->requiresTenantSubscription($hosted)
             ->defaultThemeMode(ThemeMode::Dark)
-            ->font('IBM Plex Sans')
-            ->colors([
-                // Open Beekeeping pollen yellow.
-                'primary' => Color::hex('#ffd60a'),
-                'gray' => Color::Zinc,
-            ])
+            // Open Beekeeping design system: self-hosted fonts and tokens, see openbka:sync-design.
+            ->font('IBM Plex Sans', url: asset('design/css/openbeekeeping.css'), provider: LocalFontProvider::class)
+            ->colors(Design::colors())
+            ->renderHook(PanelsRenderHook::HEAD_END, fn (): string => Blade::render(
+                '<link rel="stylesheet" href="{{ asset(\'design/css/theme.css\') }}"><link rel="stylesheet" href="{{ asset(\'css/openbka.css\') }}">'
+            ))
+            ->brandLogo(asset('design/logos/openbka-lockup-on-light.svg'))
+            ->darkModeBrandLogo(asset('design/logos/openbka-lockup-on-dark.svg'))
+            ->brandLogoHeight('1.75rem')
+            ->favicon(asset('design/logos/openbka-icon.svg'))
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
