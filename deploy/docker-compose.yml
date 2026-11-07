@@ -1,0 +1,82 @@
+# OpenBKA self-hosted. Put this file next to a .env file, then run `docker compose up -d`.
+# deploy/install.sh writes both files for you.
+
+x-env: &env
+  OPENBKA_MODE: self-hosted
+  DB_CONNECTION: pgsql
+  DB_HOST: db
+  DB_PORT: 5432
+  DB_DATABASE: openbka
+  DB_USERNAME: openbka
+  CACHE_STORE: database
+  QUEUE_CONNECTION: database
+  SESSION_DRIVER: database
+  LOG_CHANNEL: stderr
+
+x-app: &app
+  image: ghcr.io/openbeekeeping/openbka:${OPENBKA_VERSION:-latest}
+  restart: unless-stopped
+  env_file: .env
+  volumes:
+    - storage:/var/www/html/storage/app
+  depends_on:
+    db:
+      condition: service_healthy
+
+services:
+  app:
+    <<: *app
+    # The app container runs database migrations when it starts.
+    environment:
+      <<: *env
+
+  queue:
+    <<: *app
+    command: ["php", "/var/www/html/artisan", "queue:work", "--tries=3"]
+    environment:
+      <<: *env
+      AUTORUN_ENABLED: "false"
+    healthcheck:
+      test: ["CMD", "healthcheck-queue"]
+
+  scheduler:
+    <<: *app
+    command: ["php", "/var/www/html/artisan", "schedule:work"]
+    environment:
+      <<: *env
+      AUTORUN_ENABLED: "false"
+    healthcheck:
+      test: ["CMD", "healthcheck-schedule"]
+
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: openbka
+      POSTGRES_USER: openbka
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U openbka -d openbka"]
+      interval: 5s
+      retries: 10
+
+  # Caddy gets and renews the HTTPS certificate for OPENBKA_DOMAIN.
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    command: caddy reverse-proxy --from ${OPENBKA_DOMAIN} --to app:8080
+    volumes:
+      - caddy:/data
+    depends_on:
+      - app
+
+volumes:
+  db:
+  storage:
+  caddy:
