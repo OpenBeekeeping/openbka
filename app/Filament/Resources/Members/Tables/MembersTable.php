@@ -7,6 +7,7 @@ use App\Support\Access;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Facades\Filament;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -24,7 +25,9 @@ class MembersTable
                     ->formatStateUsing(fn ($record) => $record->name)
                     ->searchable(['first_name', 'last_name'])
                     ->sortable(),
-                TextColumn::make('branch.name')->sortable(),
+                TextColumn::make('branch.name')
+                    ->sortable()
+                    ->visible(fn (): bool => Filament::getTenant()->hasBranches()),
                 TextColumn::make('email')->searchable()->toggleable(),
                 TextColumn::make('status')->badge()->sortable(),
                 TextColumn::make('renews_on')->date()->sortable()->toggleable(),
@@ -33,7 +36,7 @@ class MembersTable
             ->filters([
                 SelectFilter::make('branch')
                     ->relationship('branch', 'name', fn (Builder $query) => Access::scopeToBranch($query, 'id'))
-                    ->visible(fn () => Access::managesAssociation()),
+                    ->visible(fn (): bool => Access::managesAssociation() && Filament::getTenant()->hasBranches()),
                 SelectFilter::make('status')->options(MemberStatus::class),
             ])
             ->recordActions([

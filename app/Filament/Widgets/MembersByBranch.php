@@ -6,10 +6,11 @@ use App\Enums\MemberStatus;
 use App\Filament\Resources\Branches\BranchResource;
 use App\Models\Branch;
 use App\Support\Access;
+use Filament\Facades\Filament;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Collection;
 
-/** Branches ranked by active members. Hidden from branch admins, who only see one branch. */
+/** Branches ranked by active members. Hidden from branch admins (one branch) and associations without branches. */
 class MembersByBranch extends Widget
 {
     protected static ?int $sort = 3;
@@ -20,7 +21,7 @@ class MembersByBranch extends Widget
 
     public static function canView(): bool
     {
-        return Access::managesAssociation();
+        return Access::managesAssociation() && Filament::getTenant()->hasBranches();
     }
 
     /** @return array{branches: Collection<int, Branch>, url: string} */

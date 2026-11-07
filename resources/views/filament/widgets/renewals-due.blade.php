@@ -11,7 +11,7 @@
                         @foreach ($members as $member)
                             <tr>
                                 <td><a href="{{ \App\Filament\Resources\Members\MemberResource::getUrl('edit', ['record' => $member]) }}">{{ $member->name }}</a></td>
-                                <td class="muted">{{ $member->branch->name }}</td>
+                                <td class="muted">{{ $member->branch?->name ?? '—' }}</td>
                                 <td>
                                     {{ $member->renews_on->format('j M Y') }}
                                     @if ($member->renews_on->isPast())

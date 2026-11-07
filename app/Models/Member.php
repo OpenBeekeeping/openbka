@@ -27,14 +27,34 @@ class Member extends Model
 
     protected static function booted(): void
     {
-        // A member's branch must belong to the member's association.
         static::saving(function (Member $member) {
-            $branch = Branch::withoutGlobalScopes()->find($member->branch_id);
-
-            if (! $branch || $branch->association_id !== $member->association_id) {
-                throw ValidationException::withMessages(['branch_id' => 'Choose a branch in this association.']);
-            }
+            $member->ensureBranchFitsAssociation();
         });
+    }
+
+    /**
+     * An association with branches keeps every member in one of its own branches.
+     * An association without branches keeps its members directly, with no branch.
+     */
+    public function ensureBranchFitsAssociation(): void
+    {
+        if ($this->branch_id === null) {
+            $associationHasBranches = Branch::withoutGlobalScopes()
+                ->where('association_id', $this->association_id)
+                ->exists();
+
+            if ($associationHasBranches) {
+                throw ValidationException::withMessages(['branch_id' => 'Choose a branch for this member.']);
+            }
+
+            return;
+        }
+
+        $branch = Branch::withoutGlobalScopes()->find($this->branch_id);
+
+        if (! $branch || $branch->association_id !== $this->association_id) {
+            throw ValidationException::withMessages(['branch_id' => 'Choose a branch in this association.']);
+        }
     }
 
     protected function name(): Attribute

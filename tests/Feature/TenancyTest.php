@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Enums\Role;
 use App\Filament\Resources\Members\Pages\ListMembers;
+use App\Models\Association;
 use App\Models\Member;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Route;
@@ -74,6 +75,28 @@ class TenancyTest extends OpenBkaTestCase
 
         $member = new Member(['first_name' => 'A', 'last_name' => 'B', 'branch_id' => $theirs->branches[0]->id]);
         $member->association_id = $mine->id;
+        $member->save();
+    }
+
+    public function test_an_association_without_branches_keeps_members_directly(): void
+    {
+        $association = Association::create(['name' => 'Small BKA']);
+
+        $member = new Member(['first_name' => 'A', 'last_name' => 'B']);
+        $member->association_id = $association->id;
+        $member->save();
+
+        $this->assertNull($member->fresh()->branch_id);
+    }
+
+    public function test_an_association_with_branches_needs_every_member_in_a_branch(): void
+    {
+        $association = $this->association();
+
+        $this->expectException(ValidationException::class);
+
+        $member = new Member(['first_name' => 'A', 'last_name' => 'B']);
+        $member->association_id = $association->id;
         $member->save();
     }
 

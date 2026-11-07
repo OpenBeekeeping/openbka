@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Members\Schemas;
 
 use App\Enums\MemberStatus;
 use App\Support\Access;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -28,6 +29,7 @@ class MemberForm
                         modifyQueryUsing: fn (Builder $query) => Access::scopeToBranch($query, 'id'),
                     )
                     ->default(fn () => Access::branchId())
+                    ->visible(fn (): bool => Filament::getTenant()->hasBranches())
                     ->required()
                     ->preload(),
                 TextInput::make('membership_number')->maxLength(50),

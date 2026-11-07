@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // The tenant. One association has many branches; each branch has many members.
+        // The tenant. An association either has branches (each with members) or holds members directly.
         Schema::create('associations', function (Blueprint $table) {
             $table->id();
             $table->string('name');

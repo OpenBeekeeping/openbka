@@ -46,6 +46,12 @@ class Association extends Model implements HasCurrentTenantLabel
         return $this->hasMany(Branch::class);
     }
 
+    /** Associations with branches keep every member in a branch; those without keep members directly. */
+    public function hasBranches(): bool
+    {
+        return $this->branches()->exists();
+    }
+
     public function members(): HasMany
     {
         return $this->hasMany(Member::class);
