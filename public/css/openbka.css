@@ -1,158 +1,386 @@
 /*
- * OpenBKA: the Open Beekeeping design system ("Bracket") applied to Filament.
- * Loads after design/css/openbeekeeping.css and design/css/theme.css, so the
- * tokens (--surface, --ink, --brand, ...) follow Filament's light/dark switch.
- * Colour palettes come from the same tokens in App\Support\Design.
+ * OpenBKA: the Bickerton Beekeeping design system applied to Filament.
+ * Loads after the Bickerton tokens (public/bickerton/css). Light-only, warm wax
+ * neutrals, honey primary, DM Sans. The shell follows the Can I Check My Bees
+ * admin: white sidebar and top bar on a cream page, honey-washed active nav.
+ * Tokens only; no literal colours. Palettes come from App\Support\Design.
  */
 
-/* Shape: nearly square corners, no shadows. Depth comes from surfaces and borders. */
 :root {
-	--radius-xs: 2px;
-	--radius-sm: 2px;
-	--radius-md: 2px;
-	--radius-lg: 2px;
-	--radius-xl: 4px;
-	--radius-2xl: 4px;
+	color-scheme: light;
+	/* Champ isn't shipped (see fonts.css), so headings use DM Sans too. */
+	--font-body: "DM Sans Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+	--font-display: "DM Sans Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
 	--font-family-mono: var(--font-mono);
+
+	/* The Bickerton spacing tokens reuse Tailwind's --container-* names for page
+	   widths; Filament needs Tailwind's own values (modals, sign-in card). */
+	--container-xs: 20rem;
+	--container-sm: 24rem;
+	--container-md: 28rem;
+	--container-lg: 32rem;
+	--container-xl: 36rem;
+	--container-2xl: 42rem;
 }
 
-*,
-::before,
-::after {
-	--tw-shadow: 0 0 #0000 !important;
-}
-
-/* Type: Plex Sans for reading, Martian Mono for headings and interface labels. */
 body.fi-body {
-	font-family: var(--font-sans);
-	background-color: var(--surface);
-	color: var(--ink);
+	background: var(--surface-sunken);
+	color: var(--text-primary);
+	font-family: var(--font-body);
 }
+
+::selection {
+	background: var(--honey-300);
+	color: var(--wax-900);
+}
+
+/* Keyboard focus: a solid 3px sky ring, offset 2px. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+	outline: 3px solid var(--focus-ring);
+	outline-offset: 2px;
+}
+
+/* ---------- Shell ---------- */
+
+.fi-topbar > nav,
+.fi-sidebar {
+	background: var(--surface-card);
+}
+
+.fi-topbar > nav {
+	background: color-mix(in srgb, var(--surface-card) 88%, transparent);
+	backdrop-filter: blur(8px);
+	box-shadow: none;
+	border-bottom: var(--border-width) solid var(--border-subtle);
+}
+
+@media (min-width: 64rem) {
+	.fi-sidebar {
+		border-right: var(--border-width) solid var(--border-subtle);
+	}
+}
+
+.fi-sidebar-header {
+	background: var(--surface-card);
+	box-shadow: none;
+}
+
+.fi-sidebar-item-btn {
+	border-radius: var(--radius-sm);
+}
+
+.fi-sidebar-item-label {
+	color: var(--text-secondary);
+	font-weight: var(--fw-semibold);
+}
+
+.fi-sidebar-item-btn:hover {
+	background: var(--wax-100);
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+	background: var(--surface-brand-subtle);
+}
+
+.fi-sidebar-item.fi-active .fi-sidebar-item-label {
+	color: var(--brand-deep);
+}
+
+.fi-sidebar-item.fi-active .fi-icon {
+	color: var(--honey-700);
+}
+
+.fi-sidebar-group-label {
+	font-size: var(--text-xs);
+	letter-spacing: var(--tracking-eyebrow);
+	text-transform: uppercase;
+	color: var(--text-muted);
+}
+
+/* Brand: Barney's bee and the product name. */
+.ob-brand {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-3);
+	color: var(--text-primary);
+}
+
+.ob-brand img {
+	width: 1.9rem;
+	height: 1.9rem;
+}
+
+.ob-brand b {
+	display: block;
+	font-family: var(--font-display);
+	font-weight: var(--fw-extrabold);
+	font-size: var(--text-lg);
+	line-height: 1.05;
+	letter-spacing: var(--tracking-tight);
+}
+
+.ob-brand small {
+	display: block;
+	font-size: var(--text-2xs);
+	font-weight: var(--fw-semibold);
+	color: var(--text-muted);
+	letter-spacing: var(--tracking-wide);
+	text-transform: uppercase;
+}
+
+/* ---------- Headings ---------- */
 
 .fi-header-heading,
 .fi-simple-header-heading {
-	font-family: var(--font-mono);
-	font-weight: 700;
-	letter-spacing: -0.05em;
+	font-family: var(--font-display);
+	font-weight: var(--fw-extrabold);
+	letter-spacing: var(--tracking-tight);
+	text-wrap: balance;
 }
 
 .fi-section-header-heading,
-.fi-modal-heading,
-.fi-wi-stats-overview-stat-value {
-	font-family: var(--font-mono);
-	font-weight: 700;
-	letter-spacing: -0.04em;
+.fi-modal-heading {
+	font-weight: var(--fw-bold);
 }
 
-/* Interface labels are lowercase mono, like the wordmark. */
-.fi-btn,
-.fi-badge,
-.fi-link,
-.fi-tabs-item-label,
-.fi-sidebar-item-label,
-.fi-sidebar-group-label,
-.fi-dropdown-list-item-label,
-.fi-fo-field-label-content,
-.fi-ta-header-cell,
-.fi-wi-stats-overview-stat-label {
-	font-family: var(--font-mono);
-	letter-spacing: 0.02em;
-	text-transform: lowercase;
+/* Eyebrow-style table headers, as in the CICMB admin tables. */
+.fi-ta-header-cell {
+	font-size: var(--text-xs);
+	font-weight: var(--fw-semibold);
+	color: var(--text-muted);
+	letter-spacing: var(--tracking-wide);
+	text-transform: uppercase;
+	background: var(--wax-50);
 }
 
-.fi-btn,
-.fi-badge,
-.fi-fo-field-label-content,
-.fi-ta-header-cell,
-.fi-wi-stats-overview-stat-label {
-	font-size: 12px;
-	font-weight: 600;
-}
+/* ---------- Surfaces ---------- */
 
-/* Names people typed stay as typed. */
-.fi-tenant-menu-trigger,
-.fi-tenant-menu-trigger * {
-	text-transform: none;
-}
-
-/* Surfaces. */
-.fi-topbar > nav,
-.fi-sidebar,
-.fi-sidebar-header {
-	background-color: var(--surface);
-}
-
-.fi-section,
+.fi-section:not(.fi-section-not-contained):not(.fi-aside),
 .fi-ta-ctn,
 .fi-wi-stats-overview-stat,
 .fi-simple-main,
 .fi-modal-window,
-.fi-dropdown-panel {
-	background-color: var(--surface-raised);
-	--tw-ring-color: var(--line);
+.ob-card {
+	background: var(--surface-card);
+	border-radius: var(--radius-lg);
+	box-shadow: var(--shadow-xs);
+	--tw-ring-color: var(--border-subtle);
 }
 
-/* Controls are drawn in line-strong; decorative edges in line. */
+.fi-dropdown-panel {
+	border-radius: var(--radius-md);
+	box-shadow: var(--shadow-md);
+}
+
+.fi-ta-row:hover {
+	background: var(--wax-50);
+}
+
+/* ---------- Controls ---------- */
+
 .fi-input-wrp {
-	background-color: var(--surface-raised);
-	--tw-ring-color: var(--line-strong);
+	border-radius: var(--radius-md);
+	background: var(--surface-raised);
+	--tw-ring-color: var(--border-control);
 }
 
 .fi-input-wrp:focus-within {
-	--tw-ring-color: var(--focus-ring);
+	--tw-ring-color: var(--wax-800);
+	box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
-/* Primary actions: pollen yellow with on-brand text, and an outline on light. */
+.fi-btn {
+	border-radius: var(--radius-md);
+	font-weight: var(--fw-semibold);
+}
+
+/* Primary: honey with ink text; hover flips to ink with honey text. */
 .fi-btn.fi-color-primary:not(.fi-outlined) {
 	--bg: var(--brand);
-	--dark-bg: var(--brand);
-	--hover-bg: var(--brand-hover);
-	--dark-hover-bg: var(--brand-hover);
+	--hover-bg: var(--wax-900);
 	--text: var(--on-brand);
-	--dark-text: var(--on-brand);
-	--hover-text: var(--on-brand);
-	--dark-hover-text: var(--on-brand);
-	box-shadow: inset 0 0 0 1px var(--on-brand);
+	--hover-text: var(--brand);
+}
+
+.fi-btn.fi-color-primary:not(.fi-outlined):hover > .fi-icon {
+	color: var(--brand);
 }
 
 .fi-btn.fi-color-primary:not(.fi-outlined) > .fi-icon {
 	color: var(--on-brand);
 }
 
-/* Links in brand-ink. */
-.fi-link.fi-color-primary {
-	color: var(--brand-ink);
-}
-
-/* Keyboard focus: solid 2px ring, offset 2px. */
-:where(a, button, input, select, textarea, [tabindex]):focus-visible {
-	outline: 2px solid var(--focus-ring);
-	outline-offset: 2px;
-}
-
-/* Product colour appears only on the logo, so the active nav item stays neutral. */
-.fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
-	background-color: var(--surface-hover);
-}
-
-.fi-sidebar-item.fi-active .fi-sidebar-item-label,
-.fi-sidebar-item.fi-active .fi-icon {
-	color: var(--ink);
-}
-
-/* Status colours are for text and borders, never fills: danger actions are outlined. */
 .fi-btn.fi-color-danger:not(.fi-outlined) {
-	--bg: transparent;
-	--dark-bg: transparent;
-	--hover-bg: var(--surface-hover);
-	--dark-hover-bg: var(--surface-hover);
-	--text: var(--alert);
-	--dark-text: var(--alert);
-	--hover-text: var(--alert);
-	--dark-hover-text: var(--alert);
-	box-shadow: inset 0 0 0 1px var(--alert);
+	--bg: var(--danger);
+	--hover-bg: var(--terracotta-700);
+	--text: var(--wax-0);
+	--hover-text: var(--wax-0);
 }
 
-.fi-btn.fi-color-danger:not(.fi-outlined) > .fi-icon {
-	color: var(--alert);
+.fi-link.fi-color-primary {
+	color: var(--brand-deep);
+}
+
+.fi-badge {
+	border-radius: var(--radius-pill);
+	font-weight: var(--fw-semibold);
+}
+
+/* ---------- Dashboard (CICMB-style widgets) ---------- */
+
+.fi-wi-stats-overview-stat-label {
+	font-size: var(--text-sm);
+	font-weight: var(--fw-semibold);
+	color: var(--text-muted);
+}
+
+.fi-wi-stats-overview-stat-value {
+	font-family: var(--font-display);
+	font-weight: var(--fw-bold);
+	font-variant-numeric: tabular-nums;
+	letter-spacing: var(--tracking-tight);
+}
+
+.fi-wi-stats-overview-stat-description {
+	font-size: var(--text-xs);
+}
+
+.ob-card > header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-3);
+	padding: var(--space-4) var(--space-5);
+	border-bottom: var(--border-width) solid var(--border-subtle);
+}
+
+.ob-card > header h2 {
+	margin: 0;
+	font-weight: var(--fw-bold);
+	font-size: var(--text-base);
+}
+
+.ob-card > header a {
+	font-size: var(--text-sm);
+	color: var(--text-link);
+}
+
+.ob-card > header a:hover {
+	color: var(--text-link-hover);
+}
+
+.ob-card .ob-body {
+	padding: var(--space-4) var(--space-5);
+}
+
+.ob-hint {
+	font-size: var(--text-sm);
+	color: var(--text-muted);
+}
+
+/* Bar chart: no JavaScript, one bar per period. */
+.ob-bars {
+	display: grid;
+	grid-template-columns: repeat(var(--n, 12), 1fr);
+	gap: var(--space-2);
+	align-items: end;
+	height: 180px;
+}
+
+.ob-bar {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-end;
+	height: 100%;
+	gap: 4px;
+	font-size: var(--text-xs);
+	color: var(--text-muted);
+}
+
+.ob-bar i {
+	display: block;
+	width: 100%;
+	min-height: 2px;
+	background: var(--honey-500);
+	border-radius: var(--radius-xs) var(--radius-xs) 0 0;
+}
+
+.ob-bar b {
+	color: var(--text-primary);
+	font-variant-numeric: tabular-nums;
+}
+
+/* Ranked lists. */
+.ob-rank {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.ob-rank li {
+	display: flex;
+	justify-content: space-between;
+	gap: var(--space-3);
+	padding: 7px 0;
+	border-bottom: 1px solid var(--border-subtle);
+	font-size: var(--text-sm);
+}
+
+.ob-rank li:last-child {
+	border-bottom: 0;
+}
+
+.ob-rank li span:last-child {
+	font-weight: var(--fw-bold);
+	font-variant-numeric: tabular-nums;
+}
+
+/* Small tables inside dashboard cards. */
+.ob-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: var(--text-sm);
+}
+
+.ob-table th {
+	text-align: left;
+	font-weight: var(--fw-semibold);
+	font-size: var(--text-xs);
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: var(--tracking-wide);
+	padding: var(--space-3) var(--space-5);
+	background: var(--wax-50);
+	border-bottom: var(--border-width) solid var(--border-subtle);
+}
+
+.ob-table td {
+	padding: var(--space-3) var(--space-5);
+	border-bottom: 1px solid var(--border-subtle);
+}
+
+.ob-table tr:last-child td {
+	border-bottom: 0;
+}
+
+.ob-table a {
+	color: var(--text-primary);
+	font-weight: var(--fw-semibold);
+	text-decoration: none;
+}
+
+.ob-table a:hover {
+	color: var(--brand-deep);
+	text-decoration: underline;
+}
+
+.ob-table .muted,
+.ob-empty {
+	color: var(--text-muted);
+}
+
+.ob-empty {
+	padding: var(--space-8) var(--space-5);
+	text-align: center;
 }

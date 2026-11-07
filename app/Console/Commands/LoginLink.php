@@ -17,7 +17,7 @@ class LoginLink extends Command
         $user = User::where('email', $this->argument('email'))->first();
 
         if (! $user) {
-            $this->components->error('Error: no user with that email.');
+            $this->components->error('No user with that email.');
 
             return self::FAILURE;
         }

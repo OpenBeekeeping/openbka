@@ -5,85 +5,101 @@ namespace App\Support;
 use Filament\Support\Colors\Color;
 
 /**
- * Filament colour palettes built from the Open Beekeeping design tokens
- * (resources/design/tokens.json, copied in by scripts/sync-design.php).
+ * Filament colour palettes built from the Bickerton Beekeeping colour tokens
+ * (public/bickerton/css/colors.css, copied in by `php artisan openbka:sync-design`).
  *
- * Filament reads shade 400 for text on dark backgrounds and 600 on light ones,
- * so those two shades carry each token's exact dark and light values.
+ * The brand is light-only. Filament reads shade 600 for coloured text on light
+ * backgrounds and 500 for fills, so those carry the matching brand tokens.
  */
 class Design
 {
+    /** @var array<string, string>|null */
     protected static ?array $tokens = null;
 
-    public static function token(string $name, string $theme = 'dark'): string
+    /** The hex value of a colour token, following var() aliases. */
+    public static function token(string $name): string
     {
-        static::$tokens ??= collect(json_decode(file_get_contents(resource_path('design/tokens.json')), true)['color']['tokens'])
-            ->mapWithKeys(fn ($t) => [$t['name'] => $t['value']])
-            ->all();
+        static::$tokens ??= static::parse(file_get_contents(public_path('bickerton/css/colors.css')));
 
-        return static::$tokens[$name][$theme];
+        $value = static::$tokens[$name] ?? throw new \InvalidArgumentException("Unknown colour token --{$name}.");
+
+        return preg_match('/^var\(--([\w-]+)\)$/', $value, $m) ? static::token($m[1]) : $value;
     }
 
+    /** @return array<string, array<int, string>> */
     public static function colors(): array
     {
         return [
-            'primary' => static::primary(),
-            'gray' => static::gray(),
-            'success' => static::status('ok'),
-            'warning' => static::status('warn'),
-            'danger' => static::status('alert'),
-            'info' => static::gray(),
+            'primary' => static::family('honey', 'brand', [600 => 'honey-800']),
+            'gray' => static::wax(),
+            'success' => static::family('meadow', 'success', [50 => 'surface-meadow-subtle', 600 => 'meadow-700']),
+            'warning' => static::family('honey', 'warning', [50 => 'honey-50', 600 => 'honey-800']),
+            'danger' => static::family('terracotta', 'danger', [50 => 'danger-subtle', 600 => 'terracotta-700']),
+            'info' => static::family('sky', 'info', [50 => 'surface-sky-subtle', 600 => 'sky-300']),
         ];
     }
 
-    /** Pollen yellow. Fills use 400/500; brand-ink (light theme text) sits at 600 and up. */
-    protected static function primary(): array
+    /**
+     * A full 50–950 palette: generated from the family's core colour, with the
+     * brand's own shades put back wherever they exist.
+     *
+     * @param  string  $core  token the generated shades are based on
+     * @param  array<int, string>  $overrides  shade => token name
+     * @return array<int, string>
+     */
+    protected static function family(string $family, string $core, array $overrides = []): array
     {
-        return static::oklch(array_replace(static::generated(static::token('brand')), [
-            300 => static::token('brand-hover'),
-            400 => static::token('brand'),
-            500 => static::token('brand'),
-            600 => static::token('brand-ink', 'light'),
-        ]));
+        $palette = Color::generatePalette(static::token($core));
+
+        foreach (array_keys($palette) as $shade) {
+            if (isset(static::$tokens["{$family}-{$shade}"])) {
+                $palette[$shade] = static::token("{$family}-{$shade}");
+            }
+        }
+
+        foreach ($overrides as $shade => $token) {
+            $palette[$shade] = static::token($token);
+        }
+
+        return static::oklch($palette);
     }
 
-    /** Greys follow the surface, line and ink tokens. */
-    protected static function gray(): array
+    /** Warm "wax" neutrals in place of Filament's cold greys. @return array<int, string> */
+    protected static function wax(): array
     {
         return static::oklch([
-            50 => static::token('surface', 'light'),
-            100 => static::token('surface-sunken', 'light'),
-            200 => static::token('line', 'light'),
-            300 => '#c3c7c0',
-            400 => static::token('ink-muted'),
-            500 => static::token('line-strong', 'light'),
-            600 => static::token('ink-muted', 'light'),
-            700 => static::token('line'),
-            800 => static::token('surface-hover'),
-            900 => static::token('surface-raised'),
-            950 => static::token('surface'),
+            50 => static::token('wax-50'),
+            100 => static::token('wax-100'),
+            200 => static::token('wax-200'),
+            300 => static::token('wax-300'),
+            400 => static::token('wax-400'),
+            500 => static::token('text-muted'),
+            600 => static::token('wax-600'),
+            700 => static::token('wax-700'),
+            800 => static::token('wax-800'),
+            900 => static::token('wax-900'),
+            950 => static::token('wax-900'),
         ]);
     }
 
-    protected static function status(string $name): array
+    /** @return array<string, string> */
+    protected static function parse(string $css): array
     {
-        return static::oklch(array_replace(static::generated(static::token($name)), [
-            400 => static::token($name),
-            600 => static::token($name, 'light'),
-        ]));
+        preg_match_all('/--([\w-]+):\s*([^;]+);/', $css, $matches, PREG_SET_ORDER);
+
+        return collect($matches)->mapWithKeys(fn (array $m): array => [$m[1] => trim($m[2])])->all();
     }
 
-    protected static function generated(string $hex): array
-    {
-        return Color::generatePalette($hex);
-    }
-
+    /**
+     * @param  array<int, string>  $palette
+     * @return array<int, string>
+     */
     protected static function oklch(array $palette): array
     {
         ksort($palette);
 
         return array_map(
-            fn (string $c) => str_starts_with($c, 'oklch') ? $c : Color::convertToOklch($c),
+            fn (string $c): string => str_starts_with($c, 'oklch') ? $c : Color::convertToOklch($c),
             $palette,
         );
     }

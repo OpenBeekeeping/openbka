@@ -1,0 +1,129 @@
+/* ============================================================
+   Bickerton Beekeeping — Colour system
+   Drawn from the brand "Colours" sheet. The honey scale is the
+   hero; meadow / blossom / sky / lavender are the field accents.
+   Neutrals are a warm "wax" ramp (never cold grey).
+
+   Shades marked (derived) are tonal extensions of a brand hue,
+   added for hover, contrast and washes — not on the original
+   swatch sheet. See readme.md › Visual Foundations.
+   ============================================================ */
+
+:root {
+  /* ---- Honey (primary / hero) ---------------------------- */
+  --honey-50:  #FCF4DA;   /* derived — pale wash */
+  --honey-100: #F7E5B1;
+  --honey-200: #F8D07D;
+  --honey-300: #F0D367;
+  --honey-400: #F6CB4A;
+  --honey-500: #F0C234;   /* core brand yellow */
+  --honey-600: #F2B92C;
+  --honey-700: #D19A12;   /* derived — hover / active */
+  --honey-800: #845F06;   /* derived — accessible amber text on light (AA on honey-100 and lighter) */
+
+  /* ---- Meadow (green) ------------------------------------ */
+  --meadow-100: #ACC38A;
+  --meadow-200: #9FB77A;
+  --meadow-300: #8EAA62;
+  --meadow-400: #7B9843;
+  --meadow-500: #6C8B34;
+  --meadow-600: #57722A;  /* derived — hover / active */
+  --meadow-700: #41571F;  /* derived — accessible green text */
+
+  /* ---- Blossom (peach / coral) --------------------------- */
+  --blossom-100: #EDB58A;
+  --blossom-200: #EBA996;
+  --blossom-300: #EA9C9D;
+  --blossom-500: #AF4D43;  /* derived — accessible coral text (AA on blossom wash) */
+
+  /* ---- Sky (blue) ---------------------------------------- */
+  --sky-100: #6091BF;
+  --sky-200: #4379AC;
+  --sky-300: #345F87;      /* derived — hover / accessible link */
+
+  /* ---- Lavender (purple) --------------------------------- */
+  --lavender-300: #A587B0; /* derived — tint */
+  --lavender-500: #896297;
+  --lavender-700: #654873; /* derived — accessible purple text */
+
+  /* ---- Wax (warm neutral ramp) --------------------------- */
+  --wax-0:   #FFFFFF;
+  --wax-50:  #FDFAF2;   /* paper */
+  --wax-100: #F6EFDE;   /* cream */
+  --wax-200: #ECE1C9;   /* sand */
+  --wax-300: #D9CAA9;   /* comb */
+  --wax-400: #B9A981;   /* straw */
+  --wax-500: #93835F;   /* bark */
+  --wax-600: #6B5F44;   /* soil */
+  --wax-700: #4A4130;   /* umber */
+  --wax-800: #2E291D;   /* pitch */
+  --wax-900: #211D14;   /* ink — brand near-black */
+
+  /* ---- Danger (derived) ---------------------------------- */
+  /* No true red exists on the swatch sheet; this terracotta is
+     tuned to sit beside blossom without clashing. */
+  --terracotta-300: #E19180; /* derived */
+  --terracotta-500: #C0432F; /* derived */
+  --terracotta-700: #8F2E1F; /* derived */
+
+  /* ========================================================
+     SEMANTIC ALIASES — reach for these in product code
+     ======================================================== */
+
+  /* Brand */
+  --brand:            var(--honey-500);
+  --brand-strong:     var(--honey-600);
+  --brand-hover:      var(--honey-700);
+  --brand-deep:       var(--honey-800);
+  --brand-tint:       var(--honey-50);
+  --on-brand:         var(--wax-900);   /* dark ink on honey */
+
+  /* Text */
+  --text-primary:     var(--wax-900);
+  --text-secondary:   var(--wax-700);
+  --text-muted:       #74684B;          /* derived — between wax-500/600; AA on every light surface */
+  --text-inverse:     var(--wax-50);
+  --text-on-brand:    var(--wax-900);
+  --text-link:        #3D6E9D;          /* derived — sky-200 deepened just enough for AA */
+  --text-link-hover:  var(--sky-300);
+
+  /* Surfaces */
+  --surface-page:        var(--wax-50);
+  --surface-raised:      var(--wax-0);
+  --surface-sunken:      var(--wax-100);
+  --surface-card:        var(--wax-0);
+  --surface-inverse:     var(--wax-900);
+  --surface-brand:       var(--honey-500);
+  --surface-brand-subtle:var(--honey-50);
+  --surface-meadow-subtle:  #EAF0DE; /* derived pale meadow wash */
+  --surface-blossom-subtle: #FBEDE4; /* derived pale blossom wash */
+  --surface-sky-subtle:     #E4EDF5; /* derived pale sky wash */
+  --surface-lavender-subtle:#EEE6F1; /* derived pale lavender wash */
+
+  /* Borders */
+  --border-subtle:   var(--wax-200);
+  --border-default:  var(--wax-300);
+  --border-strong:   var(--wax-400);
+  --border-ink:      var(--wax-900);
+  /* Form-control boundaries (inputs, checkboxes, radios) must hit 3:1
+     against their surroundings (WCAG 1.4.11) — decorative borders don't. */
+  --border-control:  var(--wax-500);
+
+  /* Status */
+  --success:         var(--meadow-500);
+  --success-text:    var(--meadow-700);
+  --success-subtle:  var(--surface-meadow-subtle);
+  --info:            var(--sky-200);
+  --info-text:       var(--sky-300);
+  --info-subtle:     var(--surface-sky-subtle);
+  --warning:         var(--honey-600);
+  --warning-text:    var(--honey-800);
+  --warning-subtle:  var(--honey-50);
+  --danger:          var(--terracotta-500);
+  --danger-text:     var(--terracotta-700);
+  --danger-subtle:   #FBE7E1; /* derived */
+
+  /* Focus */
+  /* Solid, not translucent: 3:1 against every surface including ink. */
+  --focus-ring:      var(--sky-200);
+}

@@ -98,6 +98,6 @@ class Register extends BaseRegister
 
     public function getRegisterFormAction(): Action
     {
-        return parent::getRegisterFormAction()->label('create association');
+        return parent::getRegisterFormAction()->label('Create association');
     }
 }

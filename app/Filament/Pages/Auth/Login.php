@@ -74,6 +74,6 @@ class Login extends BaseLogin
 
     protected function getAuthenticateFormAction(): Action
     {
-        return parent::getAuthenticateFormAction()->label('email me a link');
+        return parent::getAuthenticateFormAction()->label('Email me a link');
     }
 }

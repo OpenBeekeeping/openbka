@@ -65,13 +65,15 @@ Run the tests with `php artisan test` and format with `vendor/bin/pint`.
 
 ### Design system
 
-OpenBKA uses the [Open Beekeeping design system](https://github.com/OpenBeekeeping/design). Its tokens, fonts and logos are copied into `public/design` and `resources/design`. To update them, check out the design repo next to this one and run:
+OpenBKA uses the Bickerton Beekeeping design system (light-only: honey, meadow and warm wax neutrals). Its colour, type, spacing and effect tokens are copied into `public/bickerton/css`. To update them from the design-system folder:
 
 ```sh
-php artisan openbka:sync-design ../design
+php artisan openbka:sync-design "/path/to/MonoRepo/brand/design-system"
 ```
 
-Filament's colours are built from the tokens in `App\Support\Design`, and `public/css/openbka.css` applies the brand rules (square corners, mono lowercase labels, yellow primary actions) to Filament's components.
+- `App\Support\Design` builds Filament's colour palettes from `colors.css`.
+- `public/css/openbka.css` applies the brand to Filament: white sidebar on a cream page, honey primary buttons that flip to ink on hover, pill badges and a sky focus ring. It also holds the dashboard widgets' card, bar chart and ranked-list styles.
+- Type is DM Sans (SIL Open Font Licence), self-hosted. The system's Champ typeface isn't included, because the supplied files are missing common characters and may not be licensed for redistribution.
 
 ## Security
 

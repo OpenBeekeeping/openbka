@@ -38,7 +38,7 @@ class MagicLinkTest extends OpenBkaTestCase
         $user = User::factory()->unverified()->create();
         $url = MagicLink::create($user);
 
-        $this->get($url)->assertOk()->assertSee('continue');
+        $this->get($url)->assertOk()->assertSee('Continue');
         $this->assertGuest();
 
         $this->post($url)->assertRedirect();

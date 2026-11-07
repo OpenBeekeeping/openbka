@@ -28,7 +28,7 @@ class Install extends Command
 
         $associationName = $this->option('association') ?: text('Association name', required: true);
         $name = $this->option('name') ?: text('Your name', required: true);
-        $email = $this->option('email') ?: text('Your email', required: true, validate: fn ($v) => filter_var($v, FILTER_VALIDATE_EMAIL) ? null : 'Error: enter a valid email address.');
+        $email = $this->option('email') ?: text('Your email', required: true, validate: fn ($v) => filter_var($v, FILTER_VALIDATE_EMAIL) ? null : 'Enter a valid email address.');
 
         [$user, $association] = DB::transaction(function () use ($associationName, $name, $email) {
             $user = User::firstOrCreate(['email' => $email], ['name' => $name, 'email_verified_at' => now()]);

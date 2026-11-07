@@ -1,44 +1,40 @@
 <!doctype html>
-<html lang="en-GB" data-theme="dark">
+<html lang="en-GB">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex">
     <title>Sign in · {{ config('app.name') }}</title>
-    <link rel="icon" href="{{ asset('design/logos/openbka-icon.svg') }}">
-    <link rel="stylesheet" href="{{ asset('design/css/openbeekeeping.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('bickerton/brand/favicon.svg') }}">
+    <link rel="stylesheet" href="{{ asset('bickerton/css/fonts.css') }}">
+    @include('filament.head')
     <style>
-        body { margin: 0; min-height: 100vh; display: grid; place-content: center; gap: var(--space-8); padding: var(--space-4); background: var(--surface); color: var(--ink); }
-        .ob-lockup { font-size: 28px; justify-self: center; }
-        .ob-card { width: min(380px, calc(100vw - 32px)); }
-        form, .ob-card__actions { margin: 0; }
-        .ob-btn { width: 100%; justify-content: center; }
+        body { margin: 0; min-height: 100vh; display: grid; place-content: center; gap: var(--space-6); padding: var(--space-4); background: var(--surface-sunken); color: var(--text-primary); font-family: var(--font-body); font-size: var(--text-base); line-height: var(--leading-normal); }
+        .ob-brand { justify-self: center; }
+        .ob-card { width: min(400px, calc(100vw - 32px)); padding: var(--space-6); display: grid; gap: var(--space-3); border: var(--border-width) solid var(--border-subtle); }
+        h1 { margin: 0; font-family: var(--font-display); font-weight: var(--fw-extrabold); font-size: var(--text-2xl); letter-spacing: var(--tracking-tight); line-height: var(--leading-snug); }
+        p { margin: 0; color: var(--text-secondary); }
+        form { margin: var(--space-2) 0 0; }
+        .btn { display: flex; align-items: center; justify-content: center; width: 100%; height: 48px; margin-top: var(--space-2); border: 0; border-radius: var(--radius-pill); background: var(--brand); color: var(--on-brand); font: inherit; font-weight: var(--fw-bold); text-decoration: none; cursor: pointer; transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
+        .btn:hover { background: var(--wax-900); color: var(--brand); }
+        .btn:active { transform: translateY(1px); }
     </style>
 </head>
-<body data-product="bka">
-    <span class="ob-lockup" aria-label="openbka">
-        <svg class="ob-mark" viewBox="0 0 32 32" aria-hidden="true">
-            <polyline class="ob-mark__frame" points="9.75,5.17 3.5,16 9.75,26.83"/>
-            <polyline class="ob-mark__frame" points="22.25,5.17 28.5,16 22.25,26.83"/>
-            <path class="ob-mark__cell" d="M12.75 10.37 L19.25 10.37 L20.55 12.62 L11.45 12.62Z M10.15 14.87 L21.85 14.87 L22.5 16 L21.85 17.13 L10.15 17.13 L9.5 16Z M11.45 19.38 L20.55 19.38 L19.25 21.63 L12.75 21.63Z"/>
-        </svg>
-        <span>open<b>bka</b></span>
-    </span>
+<body>
+    @include('filament.brand')
 
     <main class="ob-card">
         @if ($valid)
-            <h1 class="ob-card__title">Sign in to {{ config('app.name') }}</h1>
-            <p class="ob-card__body">Continue to finish signing in on this device.</p>
-            <form class="ob-card__actions" method="post" action="{{ route('magic-link.store', ['token' => $token]) }}">
+            <h1>Sign in to {{ config('app.name') }}</h1>
+            <p>Continue to finish signing in on this device.</p>
+            <form method="post" action="{{ route('magic-link.store', ['token' => $token]) }}">
                 @csrf
-                <button type="submit" class="ob-btn ob-btn--primary ob-btn--lg">continue</button>
+                <button type="submit" class="btn">Continue</button>
             </form>
         @else
-            <h1 class="ob-card__title">Error: this link has expired</h1>
-            <p class="ob-card__body">Sign-in links work once and expire after {{ config('openbka.magic_link_ttl') }} minutes. Ask for a new one.</p>
-            <div class="ob-card__actions">
-                <a class="ob-btn ob-btn--primary ob-btn--lg" href="{{ filament()->getDefaultPanel()->getLoginUrl() }}">get a new link</a>
-            </div>
+            <h1>This link has expired</h1>
+            <p>Sign-in links work once and expire after {{ config('openbka.magic_link_ttl') }} minutes. Ask for a new one and we’ll email it straight over.</p>
+            <a class="btn" href="{{ filament()->getDefaultPanel()->getLoginUrl() }}">Get a new link</a>
         @endif
     </main>
 </body>

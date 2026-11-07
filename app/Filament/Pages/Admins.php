@@ -67,7 +67,7 @@ class Admins extends Page implements HasTable
             ])
             ->headerActions([
                 Action::make('invite')
-                    ->label('invite admin')
+                    ->label('Invite admin')
                     ->icon(Heroicon::OutlinedUserPlus)
                     ->schema($this->roleFields(withPerson: true))
                     ->action(function (array $data) {
@@ -75,7 +75,7 @@ class Admins extends Page implements HasTable
                         $user = User::firstOrCreate(['email' => $data['email']], ['name' => $data['name']]);
 
                         if ($association->users()->whereKey($user)->exists()) {
-                            Notification::make()->title('Error: '.$data['email'].' is already an admin here.')->danger()->send();
+                            Notification::make()->title($data['email'].' is already an admin here.')->danger()->send();
 
                             return;
                         }
@@ -88,7 +88,7 @@ class Admins extends Page implements HasTable
             ])
             ->recordActions([
                 Action::make('changeRole')
-                    ->label('change role')
+                    ->label('Change role')
                     ->icon(Heroicon::OutlinedPencilSquare)
                     ->fillForm(fn (User $record) => [
                         'role' => $record->pivot->role,

@@ -1,0 +1,63 @@
+/* ============================================================
+   Bickerton Beekeeping — Typography
+   One family does everything: Champ. Heavy cuts for display,
+   the "Champ Text" optical cut for running copy.
+   ============================================================ */
+
+:root {
+  /* ---- Families ------------------------------------------ */
+  --font-display: "Champ", "Arial Black", system-ui, sans-serif;
+  --font-body:    "Champ Text", "Champ", system-ui, -apple-system, sans-serif;
+  /* System fallback — the brand ships no monospace. Use only for
+     code / SKUs / raw data. Flagged in readme.md › Typography. */
+  --font-mono:    ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* ---- Weights ------------------------------------------- */
+  --fw-thin:      100; /* @kind font */
+  --fw-light:     300; /* @kind font */
+  --fw-regular:   400; /* @kind font */
+  --fw-medium:    500; /* @kind font */
+  --fw-semibold:  600; /* @kind font */
+  --fw-bold:      700; /* @kind font */
+  --fw-extrabold: 800; /* @kind font */
+  --fw-black:     900; /* @kind font */
+
+  /* ---- Type scale (px) ----------------------------------- */
+  --text-2xs:  11px;
+  --text-xs:   12px;
+  --text-sm:   14px;
+  --text-base: 16px;
+  --text-lg:   18px;
+  --text-xl:   20px;
+  --text-2xl:  24px;
+  --text-3xl:  30px;
+  --text-4xl:  38px;
+  --text-5xl:  48px;
+  --text-6xl:  64px;
+  --text-7xl:  84px;
+  --text-8xl:  112px;
+
+  /* ---- Line heights -------------------------------------- */
+  --leading-none:    1;
+  --leading-tight:   1.05;   /* big display lockups */
+  --leading-snug:    1.2;    /* headings */
+  --leading-normal:  1.5;    /* body */
+  --leading-relaxed: 1.65;   /* long-form reading */
+
+  /* ---- Letter-spacing ------------------------------------ */
+  --tracking-tighter: -0.03em; /* huge Champ display */
+  --tracking-tight:   -0.015em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.04em;
+  --tracking-eyebrow: 0.16em;  /* uppercase labels / eyebrows */
+
+  /* ---- Ready-made roles ---------------------------------- */
+  --title-display: var(--fw-black) var(--text-7xl)/var(--leading-tight) var(--font-display);
+  --title-h1:      var(--fw-extrabold) var(--text-5xl)/var(--leading-snug) var(--font-display);
+  --title-h2:      var(--fw-extrabold) var(--text-4xl)/var(--leading-snug) var(--font-display);
+  --title-h3:      var(--fw-bold) var(--text-2xl)/var(--leading-snug) var(--font-display);
+  --title-h4:      var(--fw-bold) var(--text-xl)/var(--leading-snug) var(--font-display);
+  --body-lg:       var(--fw-regular) var(--text-lg)/var(--leading-relaxed) var(--font-body);
+  --body-base:     var(--fw-regular) var(--text-base)/var(--leading-normal) var(--font-body);
+  --body-sm:       var(--fw-regular) var(--text-sm)/var(--leading-normal) var(--font-body);
+}

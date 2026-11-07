@@ -32,7 +32,7 @@ class Member extends Model
             $branch = Branch::withoutGlobalScopes()->find($member->branch_id);
 
             if (! $branch || $branch->association_id !== $member->association_id) {
-                throw ValidationException::withMessages(['branch_id' => 'Error: choose a branch in this association.']);
+                throw ValidationException::withMessages(['branch_id' => 'Choose a branch in this association.']);
             }
         });
     }

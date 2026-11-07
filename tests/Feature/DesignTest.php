@@ -15,21 +15,23 @@ class DesignTest extends TestCase
         }
     }
 
-    public function test_brand_shades_match_the_design_tokens(): void
+    public function test_palettes_use_the_bickerton_tokens(): void
     {
-        $primary = Design::colors()['primary'];
+        $colors = Design::colors();
 
-        $this->assertSame(Color::convertToOklch('#ffd60a'), $primary[500]);
-        $this->assertSame(Color::convertToOklch(Design::token('brand-ink', 'light')), $primary[600]);
+        $this->assertSame('#F0C234', Design::token('brand'));
+        $this->assertSame(Color::convertToOklch('#F0C234'), $colors['primary'][500]);
+        $this->assertSame(Color::convertToOklch(Design::token('honey-800')), $colors['primary'][600]);
+        $this->assertSame(Color::convertToOklch(Design::token('wax-900')), $colors['gray'][950]);
     }
 
-    public function test_the_panel_loads_the_design_system(): void
+    public function test_the_panel_loads_the_bickerton_theme(): void
     {
         $this->get('/app/login')
             ->assertOk()
-            ->assertSee('design/css/openbeekeeping.css')
-            ->assertSee('design/css/theme.css')
+            ->assertSee('bickerton/css/colors.css')
+            ->assertSee('bickerton/css/fonts.css')
             ->assertSee('css/openbka.css')
-            ->assertSee('design/logos/openbka-lockup-on-dark.svg');
+            ->assertSee('bickerton/brand/bee-icon.svg');
     }
 }
