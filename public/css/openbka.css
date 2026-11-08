@@ -97,7 +97,7 @@ body.fi-body {
 	color: var(--text-muted);
 }
 
-/* Brand: Barney's bee and the product name. */
+/* Brand: a bee emoji and the product name. */
 .ob-brand {
 	display: inline-flex;
 	align-items: center;
@@ -105,9 +105,9 @@ body.fi-body {
 	color: var(--text-primary);
 }
 
-.ob-brand img {
-	width: 1.9rem;
-	height: 1.9rem;
+.ob-brand .ob-bee {
+	font-size: 1.6rem;
+	line-height: 1;
 }
 
 .ob-brand b {

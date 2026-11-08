@@ -1,4 +1,4 @@
 <span class="ob-brand">
-    <img src="{{ asset('bickerton/brand/bee-icon.svg') }}" alt="">
+    <span class="ob-bee" aria-hidden="true">🐝</span>
     <b>OpenBKA</b>
 </span>

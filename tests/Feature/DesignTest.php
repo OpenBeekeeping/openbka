@@ -32,6 +32,6 @@ class DesignTest extends TestCase
             ->assertSee('bickerton/css/colors.css')
             ->assertSee('bickerton/css/fonts.css')
             ->assertSee('css/openbka.css')
-            ->assertSee('bickerton/brand/bee-icon.svg');
+            ->assertSee('ob-bee');
     }
 }
