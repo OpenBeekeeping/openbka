@@ -21,6 +21,7 @@
     </style>
 </head>
 <body>
+    @include('filament.honeycomb')
     @include('filament.brand')
 
     <main class="ob-card">

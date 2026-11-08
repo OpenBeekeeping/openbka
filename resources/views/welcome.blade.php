@@ -55,6 +55,7 @@
     </style>
 </head>
 <body>
+    @include('filament.honeycomb')
     <div class="wrap">
         <header class="top">
             <a href="{{ url('/') }}">@include('filament.brand')</a>

@@ -52,6 +52,7 @@ class AppPanelProvider extends PanelProvider
             ->font('DM Sans Variable', url: asset('bickerton/css/fonts.css'), provider: LocalFontProvider::class)
             ->colors(Design::colors())
             ->renderHook(PanelsRenderHook::HEAD_END, fn (): View => view('filament.head'))
+            ->renderHook(PanelsRenderHook::BODY_START, fn (): View => view('filament.honeycomb'))
             ->brandLogo(fn (): View => view('filament.brand'))
             ->brandLogoHeight('2.25rem')
             ->favicon(asset('bickerton/brand/favicon.svg'))

@@ -375,3 +375,75 @@ body.fi-body {
 	padding: var(--space-8) var(--space-5);
 	text-align: center;
 }
+
+/* ---------- Honeycomb background (from Can I Check My Bees) ----------
+   Dots on the cell corners everywhere. Near the pointer: a soft honey glow, faint cell walls,
+   and fainter still the "Y" of the cells on the far side. Tiles are masks coloured from tokens.
+   Shown on the home page and the sign-in pages, not inside the app. */
+
+.hexfield {
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	--mx: -999px;
+	--my: -999px;
+	--r: 220px;
+	--tile: 56px 96.995px;
+	--near: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 0, #000 30%, transparent 100%);
+	--far: radial-gradient(circle var(--r) at var(--mx) var(--my), transparent 0, transparent 35%, #000 85%);
+}
+
+.fi-body:not(:has(.fi-simple-layout)) .hexfield {
+	display: none;
+}
+
+.hexfield i {
+	position: absolute;
+	inset: 0;
+	display: block;
+	background: var(--honey-700);
+}
+
+.hex-base {
+	opacity: 0.22;
+	-webkit-mask: url(../bickerton/brand/honeycomb-dots.svg) 0 0 / var(--tile) repeat, var(--far);
+	mask: url(../bickerton/brand/honeycomb-dots.svg) 0 0 / var(--tile) repeat, var(--far);
+	-webkit-mask-composite: source-in;
+	mask-composite: intersect;
+}
+
+.hexfield i.hex-glow {
+	opacity: 0;
+	background: radial-gradient(circle calc(var(--r) * 1.3) at var(--mx) var(--my), color-mix(in srgb, var(--honey-300) 14%, transparent), transparent 70%);
+}
+
+.hex-lit {
+	-webkit-mask: url(../bickerton/brand/honeycomb.svg) 0 0 / var(--tile) repeat, var(--near);
+	mask: url(../bickerton/brand/honeycomb.svg) 0 0 / var(--tile) repeat, var(--near);
+}
+
+.hex-y {
+	-webkit-mask: url(../bickerton/brand/honeycomb-y.svg) 0 0 / var(--tile) repeat, var(--near);
+	mask: url(../bickerton/brand/honeycomb-y.svg) 0 0 / var(--tile) repeat, var(--near);
+}
+
+/* After the mask shorthands, which reset it. */
+.hex-lit,
+.hex-y {
+	opacity: 0;
+	-webkit-mask-composite: source-in;
+	mask-composite: intersect;
+}
+
+.hexfield.lit .hex-glow { opacity: 1; }
+.hexfield.lit .hex-lit { opacity: 0.13; }
+.hexfield.lit .hex-y { opacity: 0.05; }
+
+@media (prefers-reduced-motion: no-preference) {
+	.hex-glow,
+	.hex-lit,
+	.hex-y {
+		transition: opacity var(--dur-slow) var(--ease-out);
+	}
+}
