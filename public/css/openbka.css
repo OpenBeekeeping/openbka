@@ -115,17 +115,8 @@ body.fi-body {
 	font-family: var(--font-display);
 	font-weight: var(--fw-extrabold);
 	font-size: var(--text-lg);
-	line-height: 1.05;
+	line-height: 1;
 	letter-spacing: var(--tracking-tight);
-}
-
-.ob-brand small {
-	display: block;
-	font-size: var(--text-2xs);
-	font-weight: var(--fw-semibold);
-	color: var(--text-muted);
-	letter-spacing: var(--tracking-wide);
-	text-transform: uppercase;
 }
 
 /* ---------- Headings ---------- */
