@@ -29,6 +29,11 @@ body.fi-body {
 	font-family: var(--font-body);
 }
 
+/* Sign-in pages use the lighter page cream, like the CICMB public site; the app keeps the admin's. */
+body.fi-body:has(.fi-simple-layout) {
+	background: var(--surface-page);
+}
+
 ::selection {
 	background: var(--honey-300);
 	color: var(--wax-900);

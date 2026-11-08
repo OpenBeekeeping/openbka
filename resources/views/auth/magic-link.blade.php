@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ asset('bickerton/css/fonts.css') }}">
     @include('filament.head')
     <style>
-        body { margin: 0; min-height: 100vh; display: grid; place-content: center; gap: var(--space-6); padding: var(--space-4); background: var(--surface-sunken); color: var(--text-primary); font-family: var(--font-body); font-size: var(--text-base); line-height: var(--leading-normal); }
+        body { margin: 0; min-height: 100vh; display: grid; place-content: center; gap: var(--space-6); padding: var(--space-4); background: var(--surface-page); color: var(--text-primary); font-family: var(--font-body); font-size: var(--text-base); line-height: var(--leading-normal); }
         .ob-brand { justify-self: center; }
         .ob-card { width: min(400px, calc(100vw - 32px)); padding: var(--space-6); display: grid; gap: var(--space-3); border: var(--border-width) solid var(--border-subtle); }
         h1 { margin: 0; font-family: var(--font-display); font-weight: var(--fw-extrabold); font-size: var(--text-2xl); letter-spacing: var(--tracking-tight); line-height: var(--leading-snug); }

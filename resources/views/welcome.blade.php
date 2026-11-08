@@ -14,7 +14,7 @@
     @include('filament.head')
     <style>
         * { box-sizing: border-box; }
-        body { margin: 0; background: var(--surface-sunken); color: var(--text-primary); font-family: var(--font-body); font-size: var(--text-base); line-height: var(--leading-normal); }
+        body { margin: 0; background: var(--surface-page); color: var(--text-primary); font-family: var(--font-body); font-size: var(--text-base); line-height: var(--leading-normal); }
         a { color: inherit; }
         .wrap { width: min(1080px, 100% - 32px); margin-inline: auto; }
 
