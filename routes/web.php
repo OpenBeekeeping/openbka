@@ -1,11 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\MagicLinkController;
-use App\Support\Mode;
 use Illuminate\Support\Facades\Route;
 
-// The hosted service shows the openbka.org home page; self-hosted installs go straight to sign-in.
-Route::get('/', fn () => Mode::hosted() ? view('welcome') : redirect('/app'))->name('home');
+// The marketing site lives in the private openbka-site repo (openbka.org).
+Route::redirect('/', '/app')->name('home');
 
 Route::get('/login/link/{token}', [MagicLinkController::class, 'show'])
     ->name('magic-link.show');
